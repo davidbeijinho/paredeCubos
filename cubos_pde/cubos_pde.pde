@@ -21,7 +21,7 @@ SimpleOpenNI  context;
 void setup()
 {
   context = new SimpleOpenNI(this);
-  if(context.isInit() == false)
+  if(context.enableScene() == false)
   {
     println("PROBLEMAS!"); 
     exit();
@@ -82,7 +82,7 @@ void draw()
   }
   aux.updatePixels();
   image(aux,0,0);
-  desenhaCubos();
+ // desenhaCubos();
 }
 
 
@@ -109,8 +109,10 @@ cubinhos(larguraPECA);
 }
 
 
-void cubinhos(int t, int r, int g, int b) {
-
+void cubinhos(int t) {
+int r =int ( random(0,256) );
+ int g=int ( random(0,256) );
+  int b=int ( random(0,256) );
   pushMatrix();
   beginShape(QUADS);
   fill(r, g, b, 50);
