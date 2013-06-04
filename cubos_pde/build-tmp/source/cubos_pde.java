@@ -1,8 +1,26 @@
-import SimpleOpenNI.*;
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import SimpleOpenNI.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class cubos_pde extends PApplet {
+
+
 
 int grelhaLargura=20;
 int grelhaAltura=15;
-float precentagem=0.5;
+float precentagem=0.5f;
 
 boolean [][] grelha = new boolean[grelhaLargura][grelhaAltura];
 
@@ -12,16 +30,16 @@ int pixelsPECA;
 int comecoPIXEL;
 int countPIXELS;
 int contaMostra;
-color corcor;
+int corcor;
 PImage aux;
 int largura;
 int altura;
 SimpleOpenNI  context;
 
-void setup()
+public void setup()
 {
   context = new SimpleOpenNI(this);
-  if(context.isInit() == false)
+  if(context.enableScene() == false)
   {
     println("PROBLEMAS!"); 
     exit();
@@ -36,7 +54,7 @@ void setup()
   size(context.sceneWidth() , context.sceneHeight(),OPENGL); 
 }
 
-void draw()
+public void draw()
 {
   context.update();   
   aux =context.sceneImage();
@@ -86,7 +104,7 @@ void draw()
 }
 
 
-void desenhaCubos()
+public void desenhaCubos()
 {
 
 
@@ -109,7 +127,7 @@ cubinhos(larguraPECA);
 }
 
 
-void cubinhos(int t, int r, int g, int b) {
+public void cubinhos(int t, int r, int g, int b) {
 
   pushMatrix();
   beginShape(QUADS);
@@ -152,4 +170,67 @@ void cubinhos(int t, int r, int g, int b) {
 
   endShape();
   popMatrix();
+}
+class SimpleThread extends Thread {
+ 
+  boolean running;           // Is the thread running?  Yes or no?
+  int wait;                  // How many milliseconds should we wait in between executions?
+  String id;                 // Thread name
+  int count;                 // counter
+ 
+  // Constructor, create the thread
+  // It is not running by default
+  SimpleThread (int w, String s) {
+    wait = w;
+    running = false;
+    id = s;
+    count = 0;
+  }
+ 
+  public int getCount() {
+    return count;
+  }
+ 
+  // Overriding "start()"
+  public void start () {
+    // Set running equal to true
+    running = true;
+    // Print messages
+    println("Starting thread (will execute every " + wait + " milliseconds.)"); 
+    // Do whatever start does in Thread, don't forget this!
+    super.start();
+  }
+ 
+ 
+  // We must implement run, this gets triggered by start()
+  public void run () {
+    while (running && count < 10) {
+      println(id + ": " + count);
+      count++;
+      // Ok, let's wait for however long we should wait
+      try {
+        sleep((long)(wait));
+      } catch (Exception e) {
+      }
+    }
+    System.out.println(id + " thread is done!");  // The thread is done when we get to the end of run()
+  }
+ 
+ 
+  // Our method that quits the thread
+  public void quit() {
+    System.out.println("Quitting."); 
+    running = false;  // Setting running to false ends the loop in run()
+    // IUn case the thread is waiting. . .
+    interrupt();
+  }
+}
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "cubos_pde" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
 }
