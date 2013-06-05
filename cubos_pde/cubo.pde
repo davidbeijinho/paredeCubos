@@ -1,7 +1,7 @@
 class cubo 
 {
-	int posx;
-	int posy;
+  int posx;
+  int posy;
   int ativo;
   float angulo;
   color[] corFaces  = new color[6];
@@ -15,6 +15,7 @@ class cubo
   int jaja;
   int vou;
   int t;
+
   cubo (int _x , int _y) 
   {
     posx=_x;
@@ -23,58 +24,55 @@ class cubo
     roda=false;
     desenho=true;
     rodando=0;
-    tamanho=larguraPECA/2;//PORQUE ??????????????
+    tamanho=larguraPECA/2;
     t=tamanho;
-gogo=0;
-jaja=0;
-spedd=larguraPECA/5;
-    for (int i = 0; i<6; i++){
-      corFaces[i] =corArray[int(random(0,3))];
+    gogo=0;
+    jaja=0;
+    spedd=larguraPECA/5;
+    for (int i = 0; i<6; i++)
+    {
+      corFaces[i] =corArray[int(random(0,numCores))];
     }
+  }
 
-  }
-  void baixa(){
-  //  posy+=larguraPECA;
-  gogo++;
-  }
+  void baixa(){gogo++;}
   void sobe(){posy-=larguraPECA;}
   color getCor() {return corFaces[ativo];}
   void esconde() {desenho=false;}
   boolean mostro() {return desenho;}
   void ativa() {roda=true;}
   boolean getRoda(){return roda;}
-  
+
   void anima()
   {
-    if (desenho){
-      
-    
-    if (roda)
+    if (desenho)
     {
-      rodando+=velocidade;
-      if (rodando>90)
+      if (roda)
       {
-        roda=false;
-        rodando=0;
-        angulo+=90;
-        ativo++;
-        if (ativo==4)
-        ativo=0;
+        rodando+=velocidade;
+        if (rodando>90)
+        {
+          roda=false;
+          rodando=0;
+          angulo+=90;
+          ativo++;
+          if (ativo==4)
+          ativo=0;
+        }
+      }
+      desenha();
+      if (gogo>0)
+      {
+        posy+=spedd;
+        jaja+=spedd;
+        if (jaja>=larguraPECA)
+        {
+          posy-=jaja-larguraPECA;
+          gogo--;
+          jaja=0;
+        }
       }
     }
-    desenha();
-    if (gogo>0)
-    {
-      posy+=spedd;
-      jaja+=spedd;
-      if (jaja>=larguraPECA)
-      {
-        posy-=jaja-larguraPECA;
-      gogo--;
-      jaja=0;
-    }
-    }
-  }
   }
 
   void desenha()
