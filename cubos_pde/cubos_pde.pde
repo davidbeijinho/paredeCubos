@@ -1,5 +1,5 @@
 import SimpleOpenNI.*;
-
+//coiso
 int grelhaLargura=20;
 int grelhaAltura=15;
 float precentagem=0.5;
