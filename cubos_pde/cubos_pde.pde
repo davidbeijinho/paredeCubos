@@ -19,7 +19,7 @@ int largura;
 int altura;
 SimpleOpenNI  context;
 cubo unico;
-
+boolean limpar = false;
 
 void setup()
 {
@@ -47,45 +47,50 @@ void setup()
 void draw()
 {
    // rotateY(radians(map(mouseX,0,1280,0,360)));
-  background(255);
-  pushMatrix();
-  translate(0, 0, -((larguraPECA*1.5)) );
-  image(fundo, 0, 0, largura, altura);
-  popMatrix();
-  translate(-(larguraPECA/2), -(larguraPECA*2), -40);
+   background(255);
+   pushMatrix();
+   translate(0, 0, -((larguraPECA*1.5)) );
+   image(fundo, 0, 0, largura, altura);
+   popMatrix();
+   translate(-(larguraPECA/2), -(larguraPECA*2), -40);
 
-  lights();
-  context.update();   
-  aux =context.sceneImage();
+   lights();
+   context.update();   
+   aux =context.sceneImage();
  // aux.resize(largura,altura);
-  aux.loadPixels();
-  for (int ga = 0; ga<grelhaAltura; ga++)
+ aux.loadPixels();
+ for (int ga = 0; ga<grelhaAltura; ga++)
+ {
+  for (int gl = 0; gl<grelhaLargura; gl++)
   {
-    for (int gl = 0; gl<grelhaLargura; gl++)
+    comecoPIXEL=( (gl* (larguraPECA/2) )+(( (pixelsPECA/4)* (grelhaLargura/2) )*ga) );
+    for (int a = 0; a<alturaPECA; a++)
     {
-      comecoPIXEL=( (gl* (larguraPECA/2) )+(( (pixelsPECA/4)* (grelhaLargura/2) )*ga) );
-      for (int a = 0; a<alturaPECA; a++)
-      {
-        for (int i = comecoPIXEL   ; i < (comecoPIXEL+larguraPECA); i ++) 
-        { 
-          if ( (red(aux.pixels[i])!=0) || (blue(aux.pixels[i])!=0) || (green(aux.pixels[i])!=0) )
-          {
-            countPIXELS++;
-          }
+      for (int i = comecoPIXEL   ; i < (comecoPIXEL+larguraPECA); i ++) 
+      { 
+        if ( (red(aux.pixels[i])!=0) || (blue(aux.pixels[i])!=0) || (green(aux.pixels[i])!=0) )
+        {
+          countPIXELS++;
         }
-        comecoPIXEL+=(largura/2);
       }
-      unico= cubitos.get((ga*grelhaLargura)+gl);
-      if (countPIXELS>((pixelsPECA/4)*precentagem))
-      {
-        unico.ativa();
-      }
-      unico.anima();
-      countPIXELS=0;
+      comecoPIXEL+=(largura/2);
     }
+    unico= cubitos.get((ga*grelhaLargura)+gl);
+    if (countPIXELS>((pixelsPECA/4)*precentagem))
+    {
+      unico.ativa();
+    }
+    unico.anima();
+    countPIXELS=0;
   }
- procuraColunas();
-  baixaColunas();
+}
+if (limpar)
+{
+  limpar();
+}
+
+procuraColunas();
+baixaColunas();
   //  aux.updatePixels();
   // image(aux,0,0);
 }
@@ -177,10 +182,50 @@ void baixaColunas()
   }
 }
 
+void limpar()
+{
+  cubo auxCubo;
+boolean algum = false;
+ for (int bb = 0; bb<grelhaLargura; bb++)
+  {
+   // for (int aa = 0; aa<grelhaAltura ; aa++)
+   // {
+    int aa=grelhaAltura-1;
+      auxCubo=cubitos.get(bb+(grelhaLargura*aa));
+      if (auxCubo.mostro() )
+      {
+        float prob = random(0,10);
+        if (prob>9)
+        {
+          auxCubo.esconde();
+        }
+        else {
+          algum=true;
+        }
+      }
+    //}
+  }
+if (algum==false)
+{
+criaParede();
+limpar=false;
+}
+
+}
+
+
 boolean sketchFullScreen() {
   return true;
 }
 
 void keyPressed() {
+ if (key == 'r' || key == 'R') {
+   criaParede();
+ }
+
+if (key == 'l' || key == 'L') {
+  limpar=true;
+ }
+
 
 }
