@@ -1,6 +1,6 @@
 //GIT GUIGUI aaa
 import SimpleOpenNI.*;
-
+import java.util.Collections;
 int grelhaLargura=20;
 int grelhaAltura=15;
 float precentagem=0.5;
@@ -17,7 +17,7 @@ int pixelsPECA;
 int comecoPIXEL;
 int countPIXELS;
 
-
+PImage fundo;
 PImage aux;
 int largura;
 int altura;
@@ -25,6 +25,7 @@ SimpleOpenNI  context;
 cubo unico;
 void setup()
 {
+  fundo = loadImage("fundo.png");
   corArray[0] = #00C2FF;
   corArray[1] = #CC6699;
   corArray[2] = #D2145A;
@@ -48,8 +49,11 @@ void setup()
 
 void draw()
 {
+  baixaColunas();
+ // translate(0, 0, -300);
   lights();
-  background(0);
+  background(255);
+  image(fundo, 0, 0, largura, altura);
   context.update();   
   aux =context.sceneImage();
   aux.loadPixels();
@@ -79,6 +83,7 @@ void draw()
 }
 }
 procuraColunas();
+
 /*  aux.updatePixels();*/
 /* image(aux,0,0);*/
 }
@@ -115,38 +120,76 @@ void procuraColunas()
 
     for (int bb = 0; bb<grelhaLargura; bb++)
     {
-     for (int aa = 0; aa<grelhaAltura ; aa++)
-     {
-      auxCubo=cubitos.get(bb+(grelhaLargura*aa));
-      if (auxCubo.mostro() )
+      conta=0;
+      for (int aa = 0; aa<grelhaAltura ; aa++)
       {
-      comparar=auxCubo.getCor();
-      if (comparar==corArray[vai])
-      {
-        if (conta==0)
+        auxCubo=cubitos.get(bb+(grelhaLargura*aa));
+        if (auxCubo.mostro() )
         {
-        inicial=aa;  
-        }
-        conta++;
-      }
-      else if (conta>=3) 
-      {
+          comparar=auxCubo.getCor();
+          if (comparar==corArray[vai])
+          {
+            if (conta==0)
+            {
+              inicial=aa;  
+            }
+            conta++;
+          }
+          else if (conta>=3) 
+          {
 
-      //  for (int cc = 0; cc<conta; cc++)
-        //{
+            for (int cc = 0; cc<conta; cc++)
+            {
          //inicial+=cc;
-         auxCubo=cubitos.get( bb + ( grelhaLargura * ( inicial /*+ cc*/ ) ) );
+         auxCubo=cubitos.get( bb + ( grelhaLargura * ( inicial + cc ) ) );
          auxCubo.esconde();
-       //}
+       }
      }
      else 
      {
       conta=0;
     }
-    }
   }
+  else {
+    conta=0;
+  }
+}
 
 }
 
 } 
+}
+
+
+void baixaColunas()
+{
+
+  cubo auxCubo;
+ cubo aux1Cubo;
+
+
+    for (int bb = 0; bb<grelhaLargura; bb++)
+    {
+
+      for (int aa = 0; aa<grelhaAltura ; aa++)
+      {
+        auxCubo=cubitos.get(bb+(grelhaLargura*aa));
+        if (auxCubo.mostro() )
+        {
+            if ((aa+1)<grelhaAltura)
+            {
+                aux1Cubo=cubitos.get(bb+(grelhaLargura* (aa+1)  ));
+                if (aux1Cubo.mostro()==false)
+                {
+                  auxCubo.baixa();
+                  aux1Cubo.sobe();
+                  Collections.swap(cubitos,(bb+(grelhaLargura*aa)),(bb+(grelhaLargura*(aa+1))) );
+                }
+            }
+        }
+      }
+
+    }
+
+  
 }
