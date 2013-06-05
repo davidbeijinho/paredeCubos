@@ -1,5 +1,5 @@
 import SimpleOpenNI.*;
-//caca
+
 int grelhaLargura=20;
 int grelhaAltura=15;
 float precentagem=0.5;
@@ -9,7 +9,7 @@ ArrayList<cubo> cubitos = new ArrayList<cubo>();
 
 
 boolean [][] grelha = new boolean[grelhaLargura][grelhaAltura];
-
+//caca
 int larguraPECA;
 int alturaPECA;
 int pixelsPECA;
