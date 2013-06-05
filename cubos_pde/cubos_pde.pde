@@ -1,12 +1,12 @@
 import SimpleOpenNI.*;
-//coiso
+
 int grelhaLargura=20;
 int grelhaAltura=15;
 float precentagem=0.5;
 int numCores=3;
 color[] corArray  = new color[numCores];
 ArrayList<cubo> cubitos = new ArrayList<cubo>();
-
+//caca
 
 boolean [][] grelha = new boolean[grelhaLargura][grelhaAltura];
 
